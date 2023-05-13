@@ -7,36 +7,45 @@ const labelText = document.querySelector('.drop__label-text')
 let isDraggingOver = false; // Переменная для отслеживания состояния перетаскивания
 
 function handleFileUpload() {
-  const fileInput = document.getElementById('drop-input');
-  const file = fileInput.files[0];
+  const files = fileInput.files;
 
   const allowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'rar'];
-  const fileExtension = file.name.split('.').pop().toLowerCase();
-  if (!allowedExtensions.includes(fileExtension)) {
-    // Файл имеет недопустимое расширение
-    alert('Пожалуйста, выберите файлы с расширениями: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP, RAR.');
-    return;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+      // Файл имеет недопустимое расширение
+      alert('Пожалуйста, выберите файлы с расширениями: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP, RAR.');
+      return;
+    }
+
+    const maxSizeInBytes = 100 * 1024 * 1024; // 100 МБ
+    if (file.size > maxSizeInBytes) {
+      // Файл превышает максимальный размер
+      alert('Максимальный размер файла составляет 100 МБ.');
+      return;
+    }
   }
 
-  const maxSizeInBytes = 100 * 1024 * 1024; // 100 МБ
-  if (file.size > maxSizeInBytes) {
-    // Файл превышает максимальный размер
-    alert('Максимальный размер файла составляет 100 МБ.');
-    return;
-  }
+  // Очистить текст в заголовке
+  headerText.textContent = '';
 
+  // Здесь может быть другой код, который не вызывает readAsDataURL у FileReader,
+  // так как чтение каждого файла требует отдельного экземпляра FileReader.
 
-  // Проверка наличия файла
-  if (file) {
+  // Пример:
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
     const reader = new FileReader();
 
+    // Обработчики событий для FileReader
     reader.onloadstart = function () {
       // Показать блок загрузки
       document.querySelector('.drop__progress').style.display = 'flex';
       // Показать прогресс загрузки
       progressLine.style.width = '0%';
-      // Очистить текст в заголовке
-      headerText.textContent = '';
       // Удалить классы successfully и error
       dropForm.classList.remove('successfully', 'error');
     };
@@ -53,14 +62,22 @@ function handleFileUpload() {
       // Загрузка файла завершена
       progressLine.style.width = '0%'; // Сначала установите ширину на 0%
       setTimeout(function () {
-        progressLine.style.width = '100%'; // Затем установите ширину на 100% через 1 секунду
-      }, 1000);
-      // Остальной код...
 
-      // Загрузка файла завершена
-      progressLine.style.width = '100%';
+        progressLine.style.width = '100%'; // Затем установите ширину на 100% через 1 секунду
+      }, 100);
+
       // Отобразить название загруженного файла
-      headerText.textContent = file.name;
+      if (files.length === 1) {
+        headerText.textContent = file.name;
+      } else {
+        headerText.textContent = files.length + ' файла';
+      }
+
+      // // Плавно показать текст
+      // setTimeout(function () {
+      //   headerText.style.opacity = '1';
+      // }, 1000);
+
       // Добавить класс successfully
       dropForm.classList.add('successfully');
       // Показать блок удаления
@@ -71,8 +88,10 @@ function handleFileUpload() {
       // Задержка перед скрытием блока загрузки
       setTimeout(function () {
         document.querySelector('.drop__progress').style.display = 'none';
-      }, 1000);
+      }, 2000);
     };
+
+
 
     reader.onerror = function () {
       // Ошибка при загрузке файла
@@ -96,8 +115,16 @@ function handleFileUpload() {
 }
 
 
+
+function getFilesWord(count) {
+  const words = ['файл', 'файла', 'файлов'];
+  const cases = [2, 0, 1, 1, 1, 2];
+  const index = (count % 100 > 4 && count % 100 < 20) ? 2 : cases[(count % 10 < 5) ? count % 10 : 5];
+  return words[index];
+}
+
 function deleteUploadedFile() {
-  fileInput.value = ''; // Очистить значение input-элемента для удаления файла
+  fileInput.value = ''; // Очистить значение input-элемента для удаления файлов
   // Вернуть текст в headerText
   headerText.textContent = 'Перетащите сюда файлы или нажмите';
   // Скрыть блок удаления
@@ -109,8 +136,6 @@ function deleteUploadedFile() {
 
   labelText.textContent = 'Загрузить';
 }
-
-
 
 // Обработчик события изменения файла
 document.getElementById('drop-input').addEventListener('change', handleFileUpload);
@@ -130,28 +155,18 @@ dropForm.addEventListener('dragover', function (e) {
 // Обработчик события покидания элемента drop__form перетаскиваемым элементом
 dropForm.addEventListener('dragleave', function (e) {
   e.preventDefault();
-  if (e.relatedTarget === null || e.relatedTarget.closest('.drop__form') !== dropForm) {
+  if (e.relatedTarget !== dropForm && isDraggingOver) {
     dropForm.classList.remove('dragover');
     isDraggingOver = false;
   }
 });
 
-
-// Обработчик события отпускания элемента в drop__form
+// Обработчик события отпускания файла на drop__form
 dropForm.addEventListener('drop', function (e) {
   e.preventDefault();
   dropForm.classList.remove('dragover');
   isDraggingOver = false;
-
-  // Получите перетаскиваемый файл
-  const file = e.dataTransfer.files[0];
-
-  // Поместите файл в элемент input
-  if (file) {
-    fileInput.files = e.dataTransfer.files;
-    handleFileUpload(); // Вызовите функцию обработки загрузки файла
-  }
+  fileInput.files = e.dataTransfer.files;
+  handleFileUpload();
 });
 
-// Обработчик события изменения файла
-fileInput.addEventListener('change', handleFileUpload);
