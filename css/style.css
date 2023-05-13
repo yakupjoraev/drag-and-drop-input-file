@@ -1,0 +1,196 @@
+.drop__form {
+  position: relative;
+  /* временные стили */
+  max-width: 650px;
+  margin: 50px auto;
+
+
+
+  padding: 30px 40px;
+  background-color: #fff;
+  border: 2px dashed #40C896;
+}
+
+.drop__form.dragover {
+  border-style: solid;
+  cursor: url('../img/drag-cursor-file-png.png') 0 0, pointer !important;
+}
+
+.drop__form.dragover .drop__header {
+  opacity: 0;
+}
+
+.drop__form.dragover .drop__footer {
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+
+.drop__form.successfully .drop__header-icon.successfully {
+  display: block;
+}
+
+.drop__form.error .drop__header-icon.successfully {
+  display: none;
+}
+
+.drop__form.error .drop__header-icon.error {
+  display: block;
+}
+
+.drop__form.error .drop__header-text,
+.drop__form.error .drop__label-text {
+  color: #CD656B;
+}
+
+.drop__form.error .drop__label {
+  border-color: rgba(205, 101, 107, 0.2);
+}
+
+.drop__form.error {
+  border-color: #CD656B;
+}
+
+.drop__header {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  margin-bottom: 20px;
+  transition: opacity 0.2s linear;
+}
+
+.drop__header-icon {
+  display: none;
+}
+
+.successfully {}
+
+.error {}
+
+.drop__header-text {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.drop__progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 30px 40px;
+  background-color: #fff;
+  z-index: 2;
+  animation: fade 1s ease both;
+}
+
+.drop__progress-line {
+  width: 100%;
+  height: 5px;
+  margin-bottom: 5px;
+  background-color: #EDF4F2;
+}
+
+.drop__progress-line-inner {
+  /* width: 10%; */
+  height: 5px;
+  background-color: #40C896;
+  transition: width 0.5s ease;
+}
+
+.drop__progress-percents {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  color: #000000;
+}
+
+.drop__footer {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+  margin-bottom: 20px;
+  transition: opacity 0.2s linear;
+}
+
+.drop__input-container {}
+
+.drop__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: -100;
+}
+
+.drop__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 40px;
+  border: 2px solid rgba(64, 200, 150, 0.2);
+  cursor: pointer;
+}
+
+.drop__label-text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #40C896;
+}
+
+.drop__delete {
+  display: none;
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+}
+
+.drop__delete-img {
+  width: 24px;
+  height: 24px;
+}
+
+.drop__delete-text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 21px;
+  color: #000000;
+  opacity: 0.3;
+}
+
+
+.drop__form.drag-over {
+  /* Стили для блока во время перетаскивания файла */
+  border-color: #007bff;
+}
+
+.drag-cursor {
+  /* Кастомный курсор при перетаскивании */
+  cursor: url('../img/drag-cursor-file.png'), auto;
+}
+
+/* // Animations
+// Fade */
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

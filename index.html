@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width= , initial-scale=1.0">
+  <title>Drag and Draop</title>
+  <link href="./css/reset.css" rel="stylesheet">
+  <link href="./css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+  <form action="#" class="drop__form" draggable="true">
+    <div class="drop__header">
+      <img class="drop__header-icon successfully" src="./img/check-file.svg" alt="успешно">
+      <img class="drop__header-icon error" src="./img/error-file.svg" alt="ошибка">
+
+      <div class="drop__header-text">
+        Перетащите сюда файлы или нажмите
+      </div>
+    </div>
+
+    <div class="drop__progress" style="display: none;">
+      <div class="drop__progress-line">
+        <div class="drop__progress-line-inner" style="width: 0%;"></div>
+      </div>
+
+      <div class="drop__progress-percents">
+        <span>0%</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <div class="drop__footer">
+      <div class="drop__input-container">
+        <input class="drop__input" type="file" id="drop-input">
+
+        <label class="drop__label" for="drop-input">
+          <p class="drop__label-text">Загрузить</p>
+        </label>
+      </div>
+
+      <div class="drop__delete">
+        <img class="drop__delete-img" src="./img/delete-file.svg" alt="Удалить">
+
+        <p class="drop__delete-text">Удалить</p>
+      </div>
+    </div>
+  </form>
+
+
+
+  <script src="./js/app.js"></script>
+</body>
+
+</html>
